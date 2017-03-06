@@ -37,5 +37,59 @@ The file follows the following format:
 
 See the file script for an example of the file format
 """
+
+hasNumericArgs = ["line", "scale", "move", "rotate"]
+
 def parse_file( fname, points, transform, screen, color ):
-    pass
+    print transform
+    f = open(fname)
+    cmd = f.readline().strip()
+    args = ""
+
+    while cmd: #file not empty
+        if cmd in hasNumericArgs:
+            args = f.readline()
+            args = processArgLine(args)
+        if cmd == "line":
+             add_edge(points, args[0], args[1], args[2], args[3], args[4], args[5])
+        elif cmd == "scale":
+            mat = make_scale(args[0], args[1], args[2])
+            matrix_mult(mat, transform)
+        elif cmd == "move":
+            mat = make_translate(args[0], args[1], args[2])
+            matrix_mult(mat, transform)
+        elif cmd == "rotate":
+            if args[0] == "x":
+                mat = rotX(args[1])
+            elif args[1] == "y":
+                mat = rotY(args[1])
+            else:
+                mat = rotZ(args[2])
+            matrix_mult(mat, transform)
+        elif cmd == "ident":
+            ident(transform)
+        elif cmd == "apply":
+            print_matrix(transform)
+            print_matrix(points)
+            matrix_mult(transform, points)
+        elif cmd == "display":
+            draw_lines( points, screen, color )
+            display(screen)
+        elif cmd == "save":
+            args = f.readline().strip()
+            save_extension( screen, args )
+        print "cmd: " + cmd 
+        print "args: " + str(args)
+        cmd = f.readline().strip()
+        args = ""
+
+
+def processArgLine(args):
+    args = args.strip().split(" ")
+    i = 0
+    while i < len(args):
+        args[i] = int(args[i])
+        i += 1
+    return args
+    
+parse_file("b.txt", [], new_matrix(), new_screen(), [255, 255, 0])
