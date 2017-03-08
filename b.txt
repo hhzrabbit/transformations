@@ -1,6 +1,0 @@
-line
-0 0 0 10 7 2
-apply
-display
-save
-hi.png

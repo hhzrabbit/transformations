@@ -1,6 +1,7 @@
 from display import *
 from matrix import *
 from draw import *
+from time import sleep
 
 """
 Goes through the file named filename and performs all of the actions listed in that file.
@@ -41,7 +42,6 @@ See the file script for an example of the file format
 hasNumericArgs = ["line", "scale", "move", "rotate"]
 
 def parse_file( fname, points, transform, screen, color ):
-    print transform
     f = open(fname)
     cmd = f.readline().strip()
     args = ""
@@ -60,26 +60,24 @@ def parse_file( fname, points, transform, screen, color ):
             matrix_mult(mat, transform)
         elif cmd == "rotate":
             if args[0] == "x":
-                mat = rotX(args[1])
-            elif args[1] == "y":
-                mat = rotY(args[1])
+                mat = make_rotX(args[1])
+            elif args[0] == "y":
+                mat = make_rotY(args[1])
             else:
-                mat = rotZ(args[2])
+                mat = make_rotZ(args[1])
             matrix_mult(mat, transform)
         elif cmd == "ident":
             ident(transform)
         elif cmd == "apply":
-            print_matrix(transform)
-            print_matrix(points)
             matrix_mult(transform, points)
         elif cmd == "display":
-            draw_lines( points, screen, color )
+            clear_screen(screen)
+            draw_lines(points, screen, color)
             display(screen)
+            sleep(1)
         elif cmd == "save":
             args = f.readline().strip()
             save_extension( screen, args )
-        print "cmd: " + cmd 
-        print "args: " + str(args)
         cmd = f.readline().strip()
         args = ""
 
@@ -88,8 +86,9 @@ def processArgLine(args):
     args = args.strip().split(" ")
     i = 0
     while i < len(args):
-        args[i] = int(args[i])
+        try:
+            args[i] = int(args[i])
+        except:
+            pass
         i += 1
     return args
-    
-parse_file("b.txt", [], new_matrix(), new_screen(), [255, 255, 0])
