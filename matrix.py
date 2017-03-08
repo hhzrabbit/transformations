@@ -35,7 +35,6 @@ def make_rotY( theta ):
     m[2][0] = sin(theta)
     m[0][2] = - sin(theta)
     m[2][2] = cos(theta)
-    print_matrix(m)
     return m
 
 def make_rotZ( theta ):
