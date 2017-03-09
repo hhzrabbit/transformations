@@ -21,12 +21,6 @@ The file follows the following format:
 	 rotate: create a rotation matrix,
 	    then multiply the transform matrix by the rotation matrix -
 	    takes 2 arguments (axis, theta) axis should be x, y or z
-	 yrotate: create an y-axis rotation matrix,
-	    then multiply the transform matrix by the rotation matrix -
-	    takes 1 argument (theta)
-	 zrotate: create an z-axis rotation matrix,
-	    then multiply the transform matrix by the rotation matrix -
-	    takes 1 argument (theta)
 	 apply: apply the current transformation matrix to the 
 	    edge matrix
 	 display: draw the lines of the edge matrix to the screen
@@ -48,7 +42,7 @@ def parse_file( fname, points, transform, screen, color ):
 
     while cmd: #file not empty
         if cmd in hasNumericArgs:
-            args = f.readline()
+            args = f.readline().strip()
             args = processArgLine(args)
         if cmd == "line":
              add_edge(points, args[0], args[1], args[2], args[3], args[4], args[5])
